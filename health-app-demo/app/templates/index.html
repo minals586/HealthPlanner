@@ -1,0 +1,179 @@
+<!DOCTYPE html>
+
+<html>
+    <head>
+        <title>TODO</title>
+        <meta charset="utf-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+        <link rel="icon" href="{{ url_for('static', filename='img/cs.ico') }}">
+        <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0-beta2/dist/css/bootstrap.min.css" rel="stylesheet" 
+        integrity="sha384-BmbxuPwQa2lc/FVzBcNJ7UAyJxM6wuqIj61tLrc4wSX0szH/Ev+nYRRuWlolflfl" crossorigin="anonymous">
+        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.css">
+        <link rel="stylesheet" href="{{ url_for('static', filename='styles/custom.css') }}">
+    </head>
+
+    <body>
+
+    <main role="main" class="container extra-bottom">
+      <h1 class="mt-5">My Health Planner</h1>
+      <p><mark>Live a healthy life.</mark></p>
+    </main>
+
+    <div class="advancedquerybuttons">
+        <div style="text-align: right;">
+            <button id="exercise-query" type="button" class="btn btn-primary">Get High Performance Exercises!</button>
+        </div>
+        <p></p>
+        <div style="text-align: right;">
+            <button id="food-query" type="button" class="btn btn-primary">Look who is Eating Healthy!</button>
+        </div>
+        <p></p>
+        <div style="text-align: right;">
+            <button id="get-personalized-plan" type="button" class="btn btn-primary">Get My Personalized Plan!</button>
+        </div>
+    </div>
+    
+    <!--Restaurant Modification Buttons-->
+    <div class="button">     
+        <div style="text-align: right;"> 
+        <button type="button" class="btn btn-outline-info btn-sm" data-bs-toggle="modal" data-bs-target="#rest-modal" data-source="New Restaurant">Add a Restaurant</button>
+        </div> 
+
+         
+        <div class="modal fade" id="rest-modal" tabindex="-1" aria-labelledby="Label" aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="Label">Edit a Restaurant</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+
+            <div class="modal-body">
+                <p>
+                <div class="input-group mb-3">
+                    <span class="input-group-text" id="rest-form-display">Restaurant Name</span>
+                    <input type="text" class="form-RestaurantName" placeholder="Name of Restaurant" aria-label="rest-name" aria-describedby="basic-addon1">
+                </div>
+                </p>
+                <p>
+                <div class="input-group mb-3">
+                    <span class="input-group-text" id="rest-form-display">Address</span>
+                    <input type="text" class="form-Address" placeholder="Address" aria-label="address" aria-describedby="basic-addon1">
+                </div>
+                </p>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                <button id="submit-rest" type="button" class="btn btn-primary">Save changes</button>
+            </div>
+            </div>
+        </div>
+        </div> 
+
+    </div>         
+
+    <!--Customer Profile-->
+    <div class="customerprofile">          
+        <table class="table">
+        <h4 class="mt-5">Customer Profile</h4>
+            <thead>
+            <tr>
+                <th class="CustomerID">Customer ID</th>
+                <th class="Name">Name</th>
+                <th class="Age">Age</th>
+                <th class="Weight">Weight</th>
+                <th class="Height">Height</th>
+            </tr>
+            </thead>
+
+            <tbody>
+            <tr>
+            <td>{{items[0].CustomerID}}</td>
+            <td>{{items[0].Name}}</td>
+            <td>{{items[0].Age}}</td>
+            <td>{{items[0].Weight}}</td>
+            <td>{{items[0].Height}}</td>
+            </tr>
+            </tbody>
+        </table>
+    </div>
+
+    <!--Restaurant Order Table-->
+    <div class="restorders table-responsive">          
+    <table class="table">
+        <h4 class="mt-5">My Restaurant Orders</h4>
+        <thead>
+        <tr>
+            <th class="custid">Customer ID</th>
+            <th class="restid">Restaurant ID</th>
+            <th class="restname">Restaurant Name</th>
+            <th class="restaddress">Address</th>
+            <th class="update">Edit</th>
+            <th class="update">Remove</th>
+        </tr>
+        </thead>
+
+        <tbody>
+            {% for item in items[2] %}
+            <tr>
+                <td>{{item.CustomerID}}</td>
+                <td>{{item.RestaurantID}}</td>
+                <td>{{item.RestaurantName}}</td>
+                <td>{{item.Address}}</td>
+                <td><button type="button" class="btn btn-outline-info btn-sm" data-bs-toggle="modal" data-bs-target="#rest-modal" data-source="{{item.RestaurantID}}" data-RestaurantName = "{{item.RestaurantName}}" data-Address = "{{item.Address}}" data-CustomerID = "{{item.RestaurantID}}/{{item.CustomerID}}"><i class="fa fa-pen fa-1" aria-hidden="true"></i></button></td>
+                <td><button class="btn btn-outline-secondary btn-sm remove" data-source="{{item.RestaurantID}}/{{item.CustomerID}}" type="button"><i class="fa fa-trash fa-1" aria-hidden="true"></i></button></td>
+            </tr>
+            {% endfor %}
+        
+        </tbody>
+    </table>
+    </div>
+       
+    <!--Health Goals Table-->
+    <div class="healthgoals">          
+        <table class="table">
+        <h4 class="mt-5">My Health Goals</h4>
+            <thead>
+            <tr>
+                <th class="customerid">Customer ID</th>
+                <th class="goal">Health Goal</th>
+                <th class="calorieceiling">Calorie Ceiling</th>
+                <th class="caloriefloor">Calorie Floor</th>
+                <th class="targetweight">Target Weight</th>
+                <th class="targetcarbs">Target Carbs</th>
+                <th class="targetprotein">Target Protein</th>
+                <th class="targetfat">Target Fat</th>
+
+            </tr>
+            </thead>
+    
+            <tbody>
+            <tr>
+                <td>{{items[1].CustomerID}}</td>
+                <td>{{items[1].Goal}}</td>
+                <td>{{items[1].CalorieCeiling}}</td>
+                <td>{{items[1].CalorieFloor}}</td>
+                <td>{{items[1].TargetWeight}}</td>
+                <td>{{items[1].TargetCarbs}}</td> 
+                <td>{{items[1].TargetProtein}}</td> 
+                <td>{{items[1].TargetFat}}</td> 
+
+            </tr>
+            
+            </tbody>
+        </table>
+    </div>
+
+    <footer class="footer">
+      <div class="container">
+            <p class="text-muted"><small>App developed for CS411 UIUC by @team43</small></p>
+      </div>
+    </footer>
+  </body>
+
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0-beta2/dist/js/bootstrap.bundle.min.js" 
+        integrity="sha384-b5kHyXgcpbZJO/tY9Ul7kGkf1S0CWuKcCD38l8YkeH8z8QjE0GmW1gYU5S9FOnJ0" crossorigin="anonymous"></script>
+    <script src="{{ url_for('static', filename='script/modal.js') }}"></script>
+
+</html>
